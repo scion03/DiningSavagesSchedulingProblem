@@ -69,7 +69,21 @@ int servingsPerPot = 20;
 int remainingServings = 0;
 void *savage_function(void *arg)
 {
-  
+  int threadID = *((int *)arg);
+  while (true)
+  {
+    pot_mutex.wait();
+    while (remainingServings == 0)
+    {
+      printf("Savage %d is waiting for more food\n", threadID);
+      pot_empty_condn.signal();
+      pot_full_condn.wait();
+    }
+    remainingServings--;
+    printf("Savage %d took a serving, %d servings left\n", threadID, remainingServings);
+    pot_mutex.signal();
+    sleep(3); // time taken to eat!
+  }
 }
 void *cook_function(void *arg)
 {
