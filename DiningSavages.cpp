@@ -63,11 +63,36 @@ public:
     }
   }
 };
+semaphore pot_mutex(1), pot1(1), pot_full_condn(0), pot_empty_condn(1);
+int NumberOfSavages = 10;
+int servingsPerPot = 20;
+int remainingServings = 0;
+void *savage_function(void *arg)
+{
+  
+}
+void *cook_function(void *arg)
+{
 
+}
 
 signed main()
 {
- 
+  pthread_t savage_threads[NumberOfSavages];
+  pthread_t cook_thread;
+  int savageThreadIDs[NumberOfSavages];
+  for (int i = 0; i < NumberOfSavages; i++)
+  {
+    savageThreadIDs[i] = i;
+    pthread_create(&savage_threads[i], NULL, savage_function, &savageThreadIDs[i]);
+  }
+  pthread_create(&cook_thread, NULL, cook_function, NULL);
+  for (int i = 0; i < NumberOfSavages; i++)
+  {
+    pthread_join(savage_threads[i], NULL);
+  }
+  pthread_join(cook_thread, NULL);
+
   return 0;
 }
 
