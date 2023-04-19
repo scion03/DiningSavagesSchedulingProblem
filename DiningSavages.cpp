@@ -87,7 +87,14 @@ void *savage_function(void *arg)
 }
 void *cook_function(void *arg)
 {
-
+  while (true)
+  {
+    while (remainingServings != 0)
+      pot_empty_condn.wait();
+    remainingServings = servingsPerPot;
+    printf("Cook refilled the pot, %d servings available\n", remainingServings);
+    pot_full_condn.signal();
+  }
 }
 
 signed main()
